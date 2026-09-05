@@ -24,3 +24,4 @@ keil/Listings/
 *.build_log.htm
 .debug-labs.*
 *.bak
+keil/51_Template.uvopt
