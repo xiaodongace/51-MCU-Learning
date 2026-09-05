@@ -1,0 +1,26 @@
+# CLion / CMake
+.idea/
+cmake-build-*/
+
+# macOS
+.DS_Store
+
+#文档
+docs/
+README.md
+
+# 本地构建输出
+build/
+
+# Keil 个人设置与构建产物
+*.uvgui.*
+keil/Objects/
+keil/Listings/
+*.obj
+*.lst
+*.m51
+*.hex
+*.bin
+*.build_log.htm
+.debug-labs.*
+*.bak
