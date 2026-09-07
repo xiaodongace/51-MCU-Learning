@@ -77,6 +77,7 @@ typedef unsigned long   uint32; // 32 bits
 //                                м╥нд╪Ч
 //========================================================================
 
+#include "RTX51TNY.H"
 #include "STC8H.H"
 #include <intrins.h>
 #include <stdlib.h>

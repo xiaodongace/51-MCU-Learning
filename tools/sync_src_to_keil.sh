@@ -185,12 +185,12 @@ if [[ -n "$NEW_SOURCE_ENTRIES" ]]; then
         my $project = do { local $/; <> };
         my $entries = $ENV{SRC_SOURCE_ENTRIES};
         my $updated = $project =~ s{
-            (<Group>\s*<GroupName>Source\ Group\ 1</GroupName>\s*<Files>)
+            (<Group>\s*<GroupName>BSP</GroupName>\s*<Files>)
             (.*?)
             (</Files>\s*</Group>)
         }{$1 . $2 . $entries . $3}sex;
 
-        die "Source Group 1 was not found in Keil project\n" unless $updated;
+        die "BSP group was not found in Keil project\n" unless $updated;
         print $project;
     ' "$TEMP_PROJECT" > "$TEMP_UPDATED"
     mv "$TEMP_UPDATED" "$TEMP_PROJECT"
@@ -218,7 +218,7 @@ if [[ "$DRY_RUN" -ne 0 ]]; then
     if [[ -z "$NEW_SOURCE_ENTRIES" ]]; then
         echo "No new .c source entries are needed."
     else
-        echo "New .c source entries for Source Group 1:"
+        echo "New .c source entries for BSP:"
         for source_path in "${NEW_SOURCE_PATHS[@]}"; do
             echo "  $source_path"
         done
@@ -239,7 +239,7 @@ echo "Include paths were merged without removing existing entries."
 if [[ -z "$NEW_SOURCE_ENTRIES" ]]; then
     echo "No new .c source entries were needed."
 else
-    echo "Added .c files to Source Group 1:"
+    echo "Added .c files to BSP:"
     for source_path in "${NEW_SOURCE_PATHS[@]}"; do
         echo "  $source_path"
     done
