@@ -4,7 +4,7 @@
 
 volatile u16 system_ms = 0; // 系统时间
 
-/* 配置Timer0为1 ms自动重装系统节拍。 */
+/* 配置Timer1为1 ms自动重装系统节拍。 */
 static void Timer_Config(void) {
     TIM_InitTypeDef TIM_InitStructure; //结构定义
     //定时器0做16位自动重装, 中断频率为1000HZ
@@ -14,7 +14,7 @@ static void Timer_Config(void) {
     TIM_InitStructure.TIM_ClkOut = DISABLE; //是否输出高速脉冲, ENABLE或DISABLE
     TIM_InitStructure.TIM_Value = 65536UL - (MAIN_Fosc / 1000UL); //初值,
     TIM_InitStructure.TIM_Run = ENABLE; //是否初始化后启动定时器, ENABLE或DISABLE
-    Timer_Inilize(Timer0, &TIM_InitStructure); //初始化Timer0	  Timer0,Timer1,Timer2,Timer3,Timer4
+    Timer_Inilize(Timer1, &TIM_InitStructure); //初始化Timer0	  Timer0,Timer1,Timer2,Timer3,Timer4
     NVIC_Timer0_Init(ENABLE,Priority_0); //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,Priority_2,Priority_3
 }
 

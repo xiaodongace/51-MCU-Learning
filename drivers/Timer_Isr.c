@@ -22,11 +22,11 @@
 
 extern volatile u16 system_ms;
 
-void Timer0_ISR_Handler (void) interrupt TMR0_VECTOR		//进中断时已经清除标志
-{
-	// TODO: 在此处添加用户代码
-	system_ms++;
-}
+// void Timer0_ISR_Handler (void) interrupt TMR0_VECTOR		//进中断时已经清除标志
+// {
+// 	// TODO: 在此处添加用户代码
+//
+// }
 
 //========================================================================
 // 函数: Timer1_ISR_Handler
@@ -38,7 +38,8 @@ void Timer0_ISR_Handler (void) interrupt TMR0_VECTOR		//进中断时已经清除标志
 void Timer1_ISR_Handler (void) interrupt TMR1_VECTOR		//进中断时已经清除标志
 {
 	// TODO: 在此处添加用户代码
-	P66 = ~P66;
+	// P66 = ~P66;
+	system_ms++;
 }
 
 //========================================================================
