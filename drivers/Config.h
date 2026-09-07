@@ -83,6 +83,13 @@ typedef unsigned long   uint32; // 32 bits
 #include <stdlib.h>
 #include <stdio.h>
 
+/* RTX51 Tiny task declaration compatibility. */
+#if defined(CLION_IDE)
+#define RTX_TASK(task_id)
+#else
+#define RTX_TASK(task_id) _task_ task_id
+#endif
+
 //========================================================================
 //                             外部函数和变量声明
 //========================================================================

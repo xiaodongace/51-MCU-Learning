@@ -61,6 +61,62 @@ void NIXIE_display(u8 num, u8 id) {
     NIXIE_show(a_dat, b_idx);
 }
 
+/*
+ * 八位数码管共享同一段码总线，因此把位选设为 0xFF 后，八位会同步显示 num。
+ * 该接口只接受数字索引 0~9，非法值直接清屏，避免访问段码表越界。
+ */
+void Nixie_ShowAllDigit(u8 num)
+{
+    if (num > 9) {
+        Nixie_Clear();
+        return;
+    }
+
+    NIXIE_show(LED_TABLE[num], 0xFF);
+}
+
+/*
+ * 单段闭环跑马灯：顶部第 1~8 位向右，右侧向下，
+ * 底部第 8~1 位向左，左侧再向上回到起点。20 个位置构成一圈。
+ * 段码为低电平点亮：a=0xFE、b=0xFD、c=0xFB、d=0xF7、e=0xEF、f=0xDF。
+ */
+void Nixie_ShowRunningLight(u8 position)
+{
+    u8 digit_index;
+    u8 segment_code;
+
+    position %= 20;
+    if (position < 8) {
+        digit_index = position;
+        segment_code = 0xFE; /* 顶部 a 段：第 1 位 -> 第 8 位。 */
+    }
+    else if (position < 10) {
+        digit_index = 7;
+        /* 第 8 位先亮右上 b，再亮右下 c，视觉上从顶部向下转弯。 */
+        segment_code = (position == 8) ? 0xFD : 0xFB;
+    }
+    else if (position < 18) {
+        digit_index = 17 - position;
+        segment_code = 0xF7; /* 底部 d 段：第 8 位 -> 第 1 位。 */
+    }
+    else {
+        digit_index = 0;
+        /* 第 1 位亮左下 e、左上 f，回到下一圈的顶部起点。 */
+        segment_code = (position == 18) ? 0xEF : 0xDF;
+    }
+
+    NIXIE_show(segment_code, (u8)(1 << digit_index));
+}
+
+/*
+ * 段码 0xFF 表示所有段熄灭；位选 0x00 表示不选中任何一个数码管。
+ * 两者同时写入可确保从自检页返回后不会残留发光数字。
+ */
+void Nixie_Clear(void)
+{
+    NIXIE_show(0xFF, 0x00);
+}
+
 /* 让8个数码管同时按照a、b、c、d、e、f顺序点亮外围段。 */
 void Nixie_Running_Test(void) {
     u8 i;

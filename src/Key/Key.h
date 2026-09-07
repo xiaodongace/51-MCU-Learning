@@ -7,21 +7,21 @@
 void Key_Init(void);
 
 /*
- * 扫描KEY1至KEY3并更新公共非阻塞消抖状态。
+ * 扫描KEY1至KEY4并更新公共非阻塞消抖状态。
  * 使用按键事件的任务应在每轮主循环先调用一次本函数。
  */
 void Key_Scan(void);
 
 /*
  * 读取并消费指定按键的一次性按下事件。
- * key_index：0、1、2分别对应KEY1、KEY2、KEY3；返回非零表示发生一次按下。
+ * key_index：0、1、2、3分别对应KEY1、KEY2、KEY3、KEY4；返回非零表示发生一次按下。
  */
 u8 Key_GetPressEvent(u8 key_index);
 
 /*
  * 查询指定按键的当前物理状态。
  *
- * key_index：按键编号；当前模块支持 0（KEY1）和 1（KEY2）和 2（KEY3）。
+ * key_index：按键编号；0、1、2、3分别对应KEY1、KEY2、KEY3、KEY4。
  * 返回值：非零表示按下，0 表示松开或编号无效。
  *
  * 本函数只读取当前电平，不做消抖，也不会记录按下事件。需要非阻塞消抖

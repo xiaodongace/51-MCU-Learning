@@ -1,53 +1,27 @@
 #include "Config.h"
-#include "GPIO.h"
+#include "SelfTest.h"
 
-// P5.3 闪烁
-void sys_init() {
-	GPIO_InitTypeDef	GPIO_InitStructure;		//结构定义
-	GPIO_InitStructure.Pin  = GPIO_Pin_5;		//指定要初始化的IO,
-	GPIO_InitStructure.Mode = GPIO_PullUp;	//指定IO的输入或输出方式,GPIO_PullUp,GPIO_HighZ,GPIO_OUT_OD,GPIO_OUT_PP
-	GPIO_Inilize(GPIO_P4, &GPIO_InitStructure);//初始化
+/*
+ * 0.所有LED闪烁        Task_LED
+ * 1.热敏电阻           Task_
+ * 2.电位器+马达        Task_Motor
+ * 3.RTC时钟           Task_RTC
+ * 4.数码管            Task_NIXIE
+ * 5.温湿度            Task_Temperature
+ * 6.键盘蜂鸣器         Task_Buzzer
+ */
 
-	GPIO_InitStructure.Pin  = GPIO_Pin_7;		//指定要初始化的IO,
-	GPIO_InitStructure.Mode = GPIO_PullUp;	//指定IO的输入或输出方式,GPIO_PullUp,GPIO_HighZ,GPIO_OUT_OD,GPIO_OUT_PP
-	GPIO_Inilize(GPIO_P2, &GPIO_InitStructure);//初始化
+/*
+ * RTX51 Tiny 的任务 0 仅做一次性初始化和任务创建。
+ *
+ * 任务 1（SelfTest_InputTask）：扫描 key1~key4，产生界面事件。
+ * 任务 2（SelfTest_ViewTask）：独占初始化并刷新 SPI 菜单和 I2C 详情屏。
+ */
+void main_start(void) RTX_TASK(0)
+{
+    SelfTest_Init();
 
-	GPIO_InitStructure.Pin  = GPIO_Pin_3;		//指定要初始化的IO,
-	GPIO_InitStructure.Mode = GPIO_PullUp;	//指定IO的输入或输出方式,GPIO_PullUp,GPIO_HighZ,GPIO_OUT_OD,GPIO_OUT_PP
-	GPIO_Inilize(GPIO_P5, &GPIO_InitStructure);//初始化
-
-	EA = 1;
+    os_create_task(1);
+    os_create_task(2);
+    os_delete_task(0);
 }
-
-// 这里函数名可随意, 建议不要使用start, 会和I2C.h里的Start冲突
-void main_start() _task_ 0 {
-	sys_init();
-	// 创建任务 1
-	os_create_task(1);
-	os_create_task(2);
-	// 结束任务 0
-	os_delete_task(0);
-}
-
-void task_1() _task_ 1 {
-	while(1) {
-		P53 = 1;
-		os_wait1(K_TMO);
-		
-		P53 = 0;
-		os_wait1(K_TMO);
-	}
-}
-
-
-void task_2() _task_ 2 {
-	P45 = 0;
-	while(1) {
-		P27 = 1;
-		os_wait1(K_TMO);
-
-		P27 = 0;
-		os_wait1(K_TMO);
-	}
-}
-

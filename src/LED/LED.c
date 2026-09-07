@@ -251,3 +251,23 @@ void LED_ShowOnly(u8 index) {
         break;
     }
 }
+
+/*
+ * 累加式跑灯：先统一熄灭，再点亮 LED1~LEDcount。
+ * 这样每次更新都得到确定的输出状态，不会因上一次状态而残留多余灯光。
+ */
+void LED_ShowCount(u8 count) {
+    if (count > 8) {
+        count = 8;
+    }
+
+    LED_SetAll(0);
+    if (count >= 1) LED1 = 0;
+    if (count >= 2) LED2 = 0;
+    if (count >= 3) LED3 = 0;
+    if (count >= 4) LED4 = 0;
+    if (count >= 5) LED5 = 0;
+    if (count >= 6) LED6 = 0;
+    if (count >= 7) LED7 = 0;
+    if (count >= 8) LED8 = 0;
+}

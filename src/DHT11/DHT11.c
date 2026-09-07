@@ -33,19 +33,23 @@ static void DHT11_Delay1us(void) {
     // 41.67ns * 12 = 500ns
 }
 
-// 等待电平变换
+// 等待电平变换。模块断开或总线异常时，最多等待 120us 后返回错误，不能卡死任务。
+// 此驱动不输出 printf：自检程序未初始化 UART，阻塞式串口输出会让任务永久停住。
+#define DHT11_LEVEL_TIMEOUT_US 120
 #define wait_level_change(level, min, max, desc)                                                         \
 do{                                                                                                  \
     cnt = 0; /*确保开始是0*/                                                                          \
-    while(DHT == level){                                                                             \
+    while((DHT == level) && (cnt < DHT11_LEVEL_TIMEOUT_US)){                                      \
         /*每循环一次,代表过去了1us,通过cnt记录时间*/                                                   \
         DHT11_Delay1us();                                                                           \
         cnt++;                                                                                       \
     };                                                                                               \
+    if(DHT == level){                                                                                \
+        return -2;                                                                                   \
+    }                                                                                                 \
     \
     /*不符合目标范围, 及时短路返回, 避免代码嵌套*/                                                     \
     if(cnt < min || cnt > max){                                                                      \
-        printf("err: 时间[%dus], 不满足 %s[%dus, %dus]\n", cnt, desc, (int)min, (int)max);           \
         return -2;                                                                                      \
     }                                                                                                \
 }while(0)
@@ -71,17 +75,16 @@ static int8 DHT11_ReadRaw(u8* dat) {
     };
     // 如果不符合目标范围, 及时短路返回, 避免代码嵌套
     if (cnt < 6 || cnt > 35) {
-        printf("err: 时间[%dus], 不满足 主机释放总线时间[%dus, %dus]\n", cnt, (int)6, (int)35);
         return -1;
     }
 
     // 不要在此过程中随意打日志, 因为会消耗时间, 影响cnt计数
 
     // 3. 响应低电平时间 83us, [78, 88]us, 当前0, 直到1, 结束循环
-    wait_level_change(0, 78, 88, "响应信号低电平时间");
+    wait_level_change(0, 68, 88, "响应信号低电平时间");
 
     // 4. 响应高电平时间 87us, [78, 88]us, 当前1, 直到0, 结束循环
-    wait_level_change(1, 77, 95, "响应信号高电平时间");
+    wait_level_change(1, 68, 95, "响应信号高电平时间");
 
     // 5. 解析40bit的数据(5Byte * 8bit)
     // 外循环: 1次, 接收处理1个byte字节(一共5个字节)
@@ -94,10 +97,10 @@ static int8 DHT11_ReadRaw(u8* dat) {
             // 一个bit信号由一低一高的电平组成: 低电平一样长(54us), 区别在于高电平
 
             // 数据信号: 低电平时间 54us [50, 58]us 当前0, 直到1
-            wait_level_change(0, 46, 62, "Data信号低电平时间");
+            wait_level_change(0, 40, 62, "Data信号低电平时间");
 
             // 数据信号: 高电平时间 [23, 74]us 当前1, 直到0
-            wait_level_change(1, 23, 74, "Data信号高电平时间");
+            wait_level_change(1, 15, 74, "Data信号高电平时间");
 
             // 信号0: cnt 24us左右 [23, 27]
             // 信号1: cnt 71us左右 [68, 74]
@@ -131,11 +134,8 @@ static int8 DHT11_ReadRaw(u8* dat) {
     // }
     // printf("\n");
     if (((dat[0] + dat[1] + dat[2] + dat[3]) & 0xFF) != dat[4]) {
-        printf("温度校验失败: %d!\n", (int)__LINE__);
         return -3;
     }
-
-    printf("温度校验成功: %d\n", (int)__LINE__);
 
     return 0;
 }
@@ -157,7 +157,6 @@ int8 getHumidityAndTemperature(float* p_humidity, float* p_temperature) {
     int8 res = DHT11_ReadRaw(dat);
 
     if (res != SUCCESS) {
-        printf("获取温湿度失败,错误码为 -> %d\n", (int)res);
         return res;
     }
 
@@ -181,8 +180,6 @@ int8 getHumidityAndTemperature(float* p_humidity, float* p_temperature) {
     }
     *p_humidity = humidity;
     *p_temperature = temperature;
-
-    printf("湿度: %.2f%%, 温度: %.2f℃ \n", humidity, temperature);
 
     return res;
 }

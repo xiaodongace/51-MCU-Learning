@@ -10,8 +10,8 @@
 #define DOWN 0
 #define UP 1
 
-/* 当前公共按键事件模块支持KEY1、KEY2和KEY3。 */
-#define KEY_INPUT_COUNT 3
+/* 自检菜单使用全部四个独立按键：KEY1、KEY2、KEY3、KEY4。 */
+#define KEY_INPUT_COUNT 4
 
 /* 原始电平连续保持10 ms后，才确认为新的稳定状态。 */
 #define KEY_DEBOUNCE_MS 10
@@ -28,7 +28,7 @@ static u8 key_press_event[KEY_INPUT_COUNT];
 
 // 配置按键GPIO为带上拉输入，仅供本模块内部使用。
 static void Key_GPIO_Config(void) {
-    P5_MODE_IO_PU(GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3);
+    P5_MODE_IO_PU(GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4);
 }
 
 // 读取指定按键当前电平，仅供本模块内部使用。
@@ -40,6 +40,8 @@ static u8 get_key_value(u8 k) {
         return KEY2;
     case 2:
         return KEY3;
+    case 3:
+        return KEY4;
     default:
         return 0;
     }
@@ -67,7 +69,7 @@ static void Key_EventInit(void) {
  * 每个使用按键的Lab只需初始化一次，不能在主循环中反复调用本函数。
  */
 void Key_Init(void) {
-    /* 先配置KEY1、KEY2、KEY3为带上拉输入，再读取确定的初始电平。 */
+    /* 先配置KEY1至KEY4为带上拉输入，再读取确定的初始电平。 */
     Key_GPIO_Config();
     Key_EventInit();
 }
@@ -135,8 +137,8 @@ u8 Key_GetPressEvent(u8 key_index) {
  * “只响应一次”的策略应由具体业务决定。
  */
 u8 Key_IsPressed(u8 key_index) {
-    if (key_index >= 3) {
-        return 0; /* 当前仅配置了 KEY1、KEY2、KEY3，防止越界访问。 */
+    if (key_index >= KEY_INPUT_COUNT) {
+        return 0; /* 非法按键编号不访问状态数组。 */
     }
 
     return (get_key_value(key_index) == DOWN);

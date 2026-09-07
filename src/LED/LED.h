@@ -36,4 +36,7 @@ void test_LED(void);
  */
 void LED_ShowOnly(u8 index);
 
+/* 从 LED1 开始连续点亮 count 盏 LED；count=0 全灭，count=8 全亮。 */
+void LED_ShowCount(u8 count);
+
 #endif /* __LED_H */

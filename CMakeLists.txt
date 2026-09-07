@@ -37,6 +37,7 @@ file(GLOB_RECURSE PROJECT_SOURCES CONFIGURE_DEPENDS
 )
 
 file(GLOB_RECURSE MCU_HEADERS CONFIGURE_DEPENDS
+    "${CMAKE_SOURCE_DIR}/cmake/ide_include/*.h"
     "${CMAKE_SOURCE_DIR}/device/*.h"
     "${CMAKE_SOURCE_DIR}/drivers/*.h"
     "${CMAKE_SOURCE_DIR}/src/*.h"
@@ -83,6 +84,7 @@ target_compile_options(ide_indexing PRIVATE
 
 # 便于 CLion 识别当前目标芯片和主频相关宏。
 target_compile_definitions(ide_indexing PRIVATE
+    CLION_IDE=1
     PROJECT_MCU_STC8H8K64U=1
 )
 
