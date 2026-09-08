@@ -34,7 +34,7 @@
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
-          <IncludePath>..\device;..\drivers;..\src;..\src\Buzzer;..\src\DHT11;..\src\Labs;..\src\Labs\BuzzerToneLab;..\src\Labs\AlarmLab;..\src\Labs\BuzzerArrayLab;..\src\Matrix;..\src\Labs\LedPwmLab;..\src\Labs\AdcMotorLab;..\src\Labs\BuzzerSequenceLab;..\src\Labs\KeyLedLab;..\src\Labs\KeyOutputLab;..\src\Labs\LedBasicLab;..\src\Labs\LedCycleLab;..\src\Labs\LedFlipLab;..\src\Labs\LedFlowLab;..\src\Labs\LedModelLab;..\src\Labs\NtcTestLab;..\src\Labs\RtcDisplayLab;..\src\Labs\TimerTickLab;..\src\Labs\UartDeviceLab;..\src\Labs\MatrixKeyLab;..\src\Labs\PotMotorLab;..\src\ADC;..\src\EXTI;..\src\Factory;..\src\I2C;..\src\Key;..\src\LED;..\src\Motor;..\src\NTC;..\src\Nixie;..\src\PWM;..\src\Timer;..\src\UART;..\src\SpiOled;..\src\SelfTest</IncludePath>
+          <IncludePath>..\device;..\drivers;..\src;..\src\Buzzer;..\src\DHT11;..\src\Labs;..\src\Labs\BuzzerToneLab;..\src\Labs\AlarmLab;..\src\Labs\BuzzerArrayLab;..\src\Matrix;..\src\Labs\LedPwmLab;..\src\Labs\AdcMotorLab;..\src\Labs\BuzzerSequenceLab;..\src\Labs\KeyLedLab;..\src\Labs\KeyOutputLab;..\src\Labs\LedBasicLab;..\src\Labs\LedCycleLab;..\src\Labs\LedFlipLab;..\src\Labs\LedFlowLab;..\src\Labs\LedModelLab;..\src\Labs\NtcTestLab;..\src\Labs\RtcDisplayLab;..\src\Labs\TimerTickLab;..\src\Labs\UartDeviceLab;..\src\Labs\MatrixKeyLab;..\src\Labs\PotMotorLab;..\src\ADC;..\src\EXTI;..\src\Factory;..\src\I2C;..\src\Key;..\src\LED;..\src\Motor;..\src\NTC;..\src\Nixie;..\src\PWM;..\src\Timer;..\src\UART;..\src\SpiOled;..\src\SelfTest;..\src\Labs\AdcModeLab</IncludePath>
           <LibPath></LibPath>
           <RegisterFilePath>STC\</RegisterFilePath>
           <DBRegisterFilePath>STC\</DBRegisterFilePath>
@@ -312,7 +312,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\device;..\drivers;..\src;..\src\Buzzer;..\src\LED;..\src\Key;..\src\Nixie;..\src\ADC;..\src\PWM;..\src\Timer;..\src\UART;..\src\Motor;..\src\I2C;..\src\NTC;..\src\Factory;..\src\Labs;..\src\EXTI;..\src\Labs\LedModelLab;..\src\Labs\BuzzerSequenceLab;..\src\Labs\TimerTickLab;..\src\DHT11;..\src\Labs\BuzzerToneLab;..\src\Labs\AlarmLab;..\src\Labs\BuzzerArrayLab;..\src\Matrix;..\src\Labs\LedPwmLab;..\src\Labs\AdcMotorLab;..\src\Labs\KeyLedLab;..\src\Labs\KeyOutputLab;..\src\Labs\LedBasicLab;..\src\Labs\LedCycleLab;..\src\Labs\LedFlipLab;..\src\Labs\LedFlowLab;..\src\Labs\NtcTestLab;..\src\Labs\RtcDisplayLab;..\src\Labs\UartDeviceLab;..\src\Labs\MatrixKeyLab;..\src\Labs\PotMotorLab;..\Dirvers;..\src\SpiOled;..\src\SelfTest</IncludePath>
+              <IncludePath>..\device;..\drivers;..\src;..\src\Buzzer;..\src\LED;..\src\Key;..\src\Nixie;..\src\ADC;..\src\PWM;..\src\Timer;..\src\UART;..\src\Motor;..\src\I2C;..\src\NTC;..\src\Factory;..\src\Labs;..\src\EXTI;..\src\Labs\LedModelLab;..\src\Labs\BuzzerSequenceLab;..\src\Labs\TimerTickLab;..\src\DHT11;..\src\Labs\BuzzerToneLab;..\src\Labs\AlarmLab;..\src\Labs\BuzzerArrayLab;..\src\Matrix;..\src\Labs\LedPwmLab;..\src\Labs\AdcMotorLab;..\src\Labs\KeyLedLab;..\src\Labs\KeyOutputLab;..\src\Labs\LedBasicLab;..\src\Labs\LedCycleLab;..\src\Labs\LedFlipLab;..\src\Labs\LedFlowLab;..\src\Labs\NtcTestLab;..\src\Labs\RtcDisplayLab;..\src\Labs\UartDeviceLab;..\src\Labs\MatrixKeyLab;..\src\Labs\PotMotorLab;..\Dirvers;..\src\SpiOled;..\src\SelfTest;..\src\Labs\AdcModeLab</IncludePath>
             </VariousControls>
           </C51>
           <Ax51>
@@ -324,7 +324,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\device;..\drivers;..\src;..\src\Buzzer;..\src\ADC;..\src\Nixie;..\src\Key;..\src\Timer;..\src\PWM;..\src\UART;..\src\LED;..\src\Motor;..\src\Factory;..\src\DHT11;..\src\Labs;..\src\Labs\BuzzerToneLab;..\src\Labs\AlarmLab;..\src\Labs\BuzzerArrayLab;..\src\Matrix;..\src\Labs\LedPwmLab;..\src\Labs\AdcMotorLab;..\src\Labs\BuzzerSequenceLab;..\src\Labs\KeyLedLab;..\src\Labs\KeyOutputLab;..\src\Labs\LedBasicLab;..\src\Labs\LedCycleLab;..\src\Labs\LedFlipLab;..\src\Labs\LedFlowLab;..\src\Labs\LedModelLab;..\src\Labs\NtcTestLab;..\src\Labs\RtcDisplayLab;..\src\Labs\TimerTickLab;..\src\Labs\UartDeviceLab;..\src\Labs\MatrixKeyLab;..\src\Labs\PotMotorLab;..\src\EXTI;..\src\I2C;..\src\NTC;..\src\SpiOled;..\src\SelfTest</IncludePath>
+              <IncludePath>..\device;..\drivers;..\src;..\src\Buzzer;..\src\ADC;..\src\Nixie;..\src\Key;..\src\Timer;..\src\PWM;..\src\UART;..\src\LED;..\src\Motor;..\src\Factory;..\src\DHT11;..\src\Labs;..\src\Labs\BuzzerToneLab;..\src\Labs\AlarmLab;..\src\Labs\BuzzerArrayLab;..\src\Matrix;..\src\Labs\LedPwmLab;..\src\Labs\AdcMotorLab;..\src\Labs\BuzzerSequenceLab;..\src\Labs\KeyLedLab;..\src\Labs\KeyOutputLab;..\src\Labs\LedBasicLab;..\src\Labs\LedCycleLab;..\src\Labs\LedFlipLab;..\src\Labs\LedFlowLab;..\src\Labs\LedModelLab;..\src\Labs\NtcTestLab;..\src\Labs\RtcDisplayLab;..\src\Labs\TimerTickLab;..\src\Labs\UartDeviceLab;..\src\Labs\MatrixKeyLab;..\src\Labs\PotMotorLab;..\src\EXTI;..\src\I2C;..\src\NTC;..\src\SpiOled;..\src\SelfTest;..\src\Labs\AdcModeLab</IncludePath>
             </VariousControls>
           </Ax51>
           <Lx51>
@@ -374,22 +374,82 @@
         <Group>
           <GroupName>BSP</GroupName>
           <Files>
-            <File><FileName>LED.c</FileName><FileType>1</FileType><FilePath>..\src\LED\LED.c</FilePath></File>
-            <File><FileName>Motor.c</FileName><FileType>1</FileType><FilePath>..\src\Motor\Motor.c</FilePath></File>
-            <File><FileName>Buzzer.c</FileName><FileType>1</FileType><FilePath>..\src\Buzzer\Buzzer.c</FilePath></File>
-            <File><FileName>Key.c</FileName><FileType>1</FileType><FilePath>..\src\Key\Key.c</FilePath></File>
-            <File><FileName>Timers.c</FileName><FileType>1</FileType><FilePath>..\src\Timer\Timers.c</FilePath></File>
-            <File><FileName>IIC.c</FileName><FileType>1</FileType><FilePath>..\src\I2C\IIC.c</FilePath></File>
-            <File><FileName>EXTIS.c</FileName><FileType>1</FileType><FilePath>..\src\EXTI\EXTIS.c</FilePath></File>
-            <File><FileName>UARTS.c</FileName><FileType>1</FileType><FilePath>..\src\UART\UARTS.c</FilePath></File>
-            <File><FileName>PWM.c</FileName><FileType>1</FileType><FilePath>..\src\PWM\PWM.c</FilePath></File>
-            <File><FileName>DHT11.c</FileName><FileType>1</FileType><FilePath>..\src\DHT11\DHT11.c</FilePath></File>
-            <File><FileName>MatrixKey.c</FileName><FileType>1</FileType><FilePath>..\src\Matrix\MatrixKey.c</FilePath></File>
-            <File><FileName>ADCS.c</FileName><FileType>1</FileType><FilePath>..\src\ADC\ADCS.c</FilePath></File>
-            <File><FileName>NTC.c</FileName><FileType>1</FileType><FilePath>..\src\NTC\NTC.c</FilePath></File>
-            <File><FileName>Factory.c</FileName><FileType>1</FileType><FilePath>..\src\Factory\Factory.c</FilePath></File>
-            <File><FileName>Nixie.c</FileName><FileType>1</FileType><FilePath>..\src\Nixie\Nixie.c</FilePath></File>
-                      <File>
+            <File>
+              <FileName>LED.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\LED\LED.c</FilePath>
+            </File>
+            <File>
+              <FileName>Motor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Motor\Motor.c</FilePath>
+            </File>
+            <File>
+              <FileName>Buzzer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Buzzer\Buzzer.c</FilePath>
+            </File>
+            <File>
+              <FileName>Key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Key\Key.c</FilePath>
+            </File>
+            <File>
+              <FileName>Timers.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Timer\Timers.c</FilePath>
+            </File>
+            <File>
+              <FileName>IIC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\I2C\IIC.c</FilePath>
+            </File>
+            <File>
+              <FileName>EXTIS.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\EXTI\EXTIS.c</FilePath>
+            </File>
+            <File>
+              <FileName>UARTS.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\UART\UARTS.c</FilePath>
+            </File>
+            <File>
+              <FileName>PWM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\PWM\PWM.c</FilePath>
+            </File>
+            <File>
+              <FileName>DHT11.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\DHT11\DHT11.c</FilePath>
+            </File>
+            <File>
+              <FileName>MatrixKey.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Matrix\MatrixKey.c</FilePath>
+            </File>
+            <File>
+              <FileName>ADCS.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\ADC\ADCS.c</FilePath>
+            </File>
+            <File>
+              <FileName>NTC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\NTC\NTC.c</FilePath>
+            </File>
+            <File>
+              <FileName>Factory.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Factory\Factory.c</FilePath>
+            </File>
+            <File>
+              <FileName>Nixie.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Nixie\Nixie.c</FilePath>
+            </File>
+            <File>
               <FileName>SpiOled.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\SpiOled\SpiOled.c</FilePath>
@@ -399,7 +459,7 @@
               <FileType>1</FileType>
               <FilePath>..\src\SelfTest\SelfTest.c</FilePath>
             </File>
-</Files>
+          </Files>
         </Group>
         <Group>
           <GroupName>Labs</GroupName>
@@ -499,7 +559,12 @@
               <FileType>1</FileType>
               <FilePath>..\src\Labs\PotMotorLab\PotMotorLab.c</FilePath>
             </File>
-          </Files>
+                      <File>
+              <FileName>AdcModeLab.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Labs\AdcModeLab\AdcModeLab.c</FilePath>
+            </File>
+</Files>
         </Group>
         <Group>
           <GroupName>Drivers</GroupName>
