@@ -4,13 +4,14 @@
 #include    "UARTS.h"
 #include    "Switch.h"
 #include    "Delay.h"
+#include    "LED.h"
 
 /*
  * UART1 接收中断每收到一个字节都会把 COM1.RX_TimeOut 重置为 TimeOutSet1。
- * EchoTask 每 10 ms 将它减 1；当前 TimeOutSet1 为 5，因此约 50 ms 没有
- * 新字节到达时，认为当前这一段数据已经接收完成并执行回显。
+ * MessageTask 每 10 ms 将它减 1；当前 TimeOutSet1 为 5，因此约 50 ms 没有
+ * 新字节到达时，认为当前这一段数据已经接收完成并开始解析命令。
  */
-#define UART_ECHO_TASK_PERIOD_MS 10
+#define UART_MESSAGE_TASK_PERIOD_MS 10
 
 
 // 初始化UART通信和串口接收中断。
@@ -39,17 +40,43 @@ void Out_Uart_Message(void) {
     }
 }
 
+/*
+ * 解析一条完整的单字节 LED 命令。
+ * 合法命令为字符 '0'/'1' 或原始字节 0x00/0x01；其他长度或内容均不改变 LED 状态。
+ */
+static void UART_HandleLedCommand(void) {
+    u8 command;
+
+    /* 第21题的协议仅接受一个字节；串口助手测试时应关闭自动附加的 CR/LF。 */
+    if (COM1.RX_Cnt != 1) {
+        printf("ERR: use 0 or 1\r\n");
+        return;
+    }
+
+    command = RX1_Buffer[0];
+    if ((command == 0x00) || (command == '0')) {
+        LED_SetAll(DISABLE);
+    }
+    else if ((command == 0x01) || (command == '1')) {
+        LED_SetAll(ENABLE);
+    }
+    else {
+        /* 使用 ASCII 错误文本，避免串口助手的字符编码影响显示结果。 */
+        printf("ERR: use 0 or 1\r\n");
+    }
+}
+
 
 /*
- * 每 10 ms 检查一次接收空闲时间；一段数据接收完成后原样回显。
+ * 每 10 ms 检查一次接收空闲时间；一段数据接收完成后解析 LED 命令。
  * 本函数应在普通 main 循环中反复调用，不依赖 RTX51 的任务等待接口。
  */
-void UART_EchoTask(void) {
+void UART_MessageTask(void) {
     /* RX_TimeOut 归零表示约 50 ms 内没有收到新字节。 */
     if ((COM1.RX_TimeOut > 0) && (--COM1.RX_TimeOut == 0)) {
         if (COM1.RX_Cnt > 0) {
-            /* 先回显完整缓冲区，再清空长度，避免本条数据被直接丢弃。 */
-            Out_Uart_Message();
+            /* 命令处理函数只解析和控制 LED，缓冲区状态由本任务统一清理。 */
+            UART_HandleLedCommand();
 
             /* 本条消息处理完成后清零长度，等待下一条消息。 */
             COM1.RX_Cnt = 0;
@@ -57,5 +84,5 @@ void UART_EchoTask(void) {
     }
 
     /* 轮询周期定义了 RX_TimeOut 的时间单位，修改此值时应同步检查超时含义。 */
-    delay_ms(UART_ECHO_TASK_PERIOD_MS);
+    delay_ms(UART_MESSAGE_TASK_PERIOD_MS);
 }

@@ -2,8 +2,6 @@
 #include "UARTS.h"
 #include "UART.h"
 #include "LED.h"
-#include "DHT11.h"
-#include "Delay.h"
 
 /* 保存串口命令当前设置的LED逻辑亮度。 */
 static u8 xdata led_brightness = 0;
@@ -12,7 +10,6 @@ static u8 xdata led_brightness = 0;
 void UartDeviceLab_Init(void) {
     /* UART和DHT11分别由自己的模块初始化，Lab只负责组织依赖关系。 */
     UART_Init();
-    DHT11_Init();
     led_brightness = 0;
 }
 
@@ -55,22 +52,4 @@ void Uart_Controller_PWM_LED(void) {
 
     /* 亮度换算和PWM寄存器配置仍由LED模块负责。 */
     LED_SetBrightness(led_brightness);
-}
-
-/* 检查接收超时，回显消息并触发一次DHT11采集。 */
-void Read_Uart_Message(void) {
-    /* RX_TimeOut递减到0表示本条串口消息已经接收完成。 */
-    if ((COM1.RX_TimeOut > 0) && (--COM1.RX_TimeOut == 0)) {
-        if (COM1.RX_Cnt > 0) {
-            /* UART模块负责回显，DHT11模块负责采集，Lab负责组合业务。 */
-            Out_Uart_Message();
-            DHT11_Task();
-        }
-
-        /* 本条消息处理完成后清零长度，等待下一条消息。 */
-        COM1.RX_Cnt = 0;
-    }
-
-    /* 保留原测试每10 ms检查一次消息的节奏。 */
-    delay_ms(10);
 }

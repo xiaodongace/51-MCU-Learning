@@ -11,8 +11,8 @@ void Out_Uart_Message(void);
 
 /*
  * 每约10 ms检查一次接收超时；连续约50 ms没有新字节时，
- * 将当前接收缓冲区原样回显。应在普通 main 循环中重复调用。
+ * 解析当前单字节 LED 命令并清理接收状态。应在普通 main 循环中重复调用。
  */
-void UART_EchoTask(void);
+void UART_MessageTask(void);
 
 #endif /* __UARTS_H */
