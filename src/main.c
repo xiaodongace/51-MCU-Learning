@@ -1,15 +1,6 @@
 #include "Config.h"
 #include "SelfTest.h"
 
-/*
- * 0.所有LED闪烁        Task_LED
- * 1.热敏电阻           Task_
- * 2.电位器+马达        Task_Motor
- * 3.RTC时钟           Task_RTC
- * 4.数码管            Task_NIXIE
- * 5.温湿度            Task_Temperature
- * 6.键盘蜂鸣器         Task_Buzzer
- */
 
 /*
  * RTX51 Tiny 的任务 0 仅做一次性初始化和任务创建。
@@ -19,9 +10,13 @@
  */
 void main_start(void) RTX_TASK(0)
 {
+    // 初始化任务基本环境
     SelfTest_Init();
 
+    // 创建任务
     os_create_task(1);
     os_create_task(2);
+
+    // 销毁任务
     os_delete_task(0);
 }

@@ -3,6 +3,14 @@
 #include    "NVIC.h"
 #include    "UARTS.h"
 #include    "Switch.h"
+#include    "Delay.h"
+
+/*
+ * UART1 接收中断每收到一个字节都会把 COM1.RX_TimeOut 重置为 TimeOutSet1。
+ * EchoTask 每 10 ms 将它减 1；当前 TimeOutSet1 为 5，因此约 50 ms 没有
+ * 新字节到达时，认为当前这一段数据已经接收完成并执行回显。
+ */
+#define UART_ECHO_TASK_PERIOD_MS 10
 
 
 // 初始化UART通信和串口接收中断。
@@ -31,3 +39,23 @@ void Out_Uart_Message(void) {
     }
 }
 
+
+/*
+ * 每 10 ms 检查一次接收空闲时间；一段数据接收完成后原样回显。
+ * 本函数应在普通 main 循环中反复调用，不依赖 RTX51 的任务等待接口。
+ */
+void UART_EchoTask(void) {
+    /* RX_TimeOut 归零表示约 50 ms 内没有收到新字节。 */
+    if ((COM1.RX_TimeOut > 0) && (--COM1.RX_TimeOut == 0)) {
+        if (COM1.RX_Cnt > 0) {
+            /* 先回显完整缓冲区，再清空长度，避免本条数据被直接丢弃。 */
+            Out_Uart_Message();
+
+            /* 本条消息处理完成后清零长度，等待下一条消息。 */
+            COM1.RX_Cnt = 0;
+        }
+    }
+
+    /* 轮询周期定义了 RX_TimeOut 的时间单位，修改此值时应同步检查超时含义。 */
+    delay_ms(UART_ECHO_TASK_PERIOD_MS);
+}
