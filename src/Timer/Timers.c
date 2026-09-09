@@ -14,9 +14,9 @@ static void Timer_Config(void) {
     TIM_InitStructure.TIM_ClkOut = DISABLE; //是否输出高速脉冲, ENABLE或DISABLE
     TIM_InitStructure.TIM_Value = 65536UL - (MAIN_Fosc / 1000UL); //初值,
     TIM_InitStructure.TIM_Run = ENABLE; //是否初始化后启动定时器, ENABLE或DISABLE
-    Timer_Inilize(Timer1, &TIM_InitStructure);
-    /* 开启 Timer1 中断后，Timer1_ISR_Handler 每 1 ms 递增 system_ms。 */
-    NVIC_Timer1_Init(ENABLE,Priority_0);
+    Timer_Inilize(Timer3, &TIM_InitStructure);
+    /* 开启 Timer3 中断后，Timer3_ISR_Handler 每 1 ms 递增 system_ms。 */
+    NVIC_Timer3_Init(ENABLE,Priority_0);
 }
 
 // 初始化应用层定时器模块。

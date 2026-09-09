@@ -65,7 +65,8 @@ void Timer2_ISR_Handler (void) interrupt TMR2_VECTOR		//进中断时已经清除标志
 void Timer3_ISR_Handler (void) interrupt TMR3_VECTOR		//进中断时已经清除标志
 {
 	// TODO: 在此处添加用户代码
-	P64 = ~P64;
+	// P64 = ~P64;
+	system_ms++;
 }
 
 //========================================================================
