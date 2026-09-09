@@ -34,7 +34,7 @@
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
-          <IncludePath>..\device;..\drivers;..\src;..\src\Buzzer;..\src\DHT11;..\src\Labs;..\src\Labs\BuzzerToneLab;..\src\Labs\AlarmLab;..\src\Labs\BuzzerArrayLab;..\src\Matrix;..\src\Labs\LedPwmLab;..\src\Labs\AdcMotorLab;..\src\Labs\BuzzerSequenceLab;..\src\Labs\KeyLedLab;..\src\Labs\KeyOutputLab;..\src\Labs\LedBasicLab;..\src\Labs\LedCycleLab;..\src\Labs\LedFlipLab;..\src\Labs\LedFlowLab;..\src\Labs\LedModelLab;..\src\Labs\NtcTestLab;..\src\Labs\RtcDisplayLab;..\src\Labs\TimerTickLab;..\src\Labs\UartDeviceLab;..\src\Labs\MatrixKeyLab;..\src\Labs\PotMotorLab;..\src\ADC;..\src\EXTI;..\src\Factory;..\src\I2C;..\src\Key;..\src\LED;..\src\Motor;..\src\NTC;..\src\Nixie;..\src\PWM;..\src\Timer;..\src\UART;..\src\SpiOled;..\src\SelfTest;..\src\Labs\AdcModeLab;..\src\Labs\UartCommand;..\src\Labs\AdcNixieLab</IncludePath>
+          <IncludePath>..\device;..\drivers;..\src;..\src\Buzzer;..\src\DHT11;..\src\Labs;..\src\Labs\BuzzerToneLab;..\src\Labs\AlarmLab;..\src\Labs\BuzzerArrayLab;..\src\Matrix;..\src\Labs\LedPwmLab;..\src\Labs\AdcMotorLab;..\src\Labs\BuzzerSequenceLab;..\src\Labs\KeyLedLab;..\src\Labs\KeyOutputLab;..\src\Labs\LedBasicLab;..\src\Labs\LedCycleLab;..\src\Labs\LedFlipLab;..\src\Labs\LedFlowLab;..\src\Labs\LedModelLab;..\src\Labs\NtcTestLab;..\src\Labs\RtcDisplayLab;..\src\Labs\TimerTickLab;..\src\Labs\UartDeviceLab;..\src\Labs\MatrixKeyLab;..\src\Labs\PotMotorLab;..\src\ADC;..\src\EXTI;..\src\Factory;..\src\I2C;..\src\Key;..\src\LED;..\src\Motor;..\src\NTC;..\src\Nixie;..\src\PWM;..\src\Timer;..\src\UART;..\src\SpiOled;..\src\SelfTest;..\src\Labs\AdcModeLab;..\src\Labs\UartCommand;..\src\Labs\AdcNixieLab;..\src\Labs\NtcDisplayLab</IncludePath>
           <LibPath></LibPath>
           <RegisterFilePath>STC\</RegisterFilePath>
           <DBRegisterFilePath>STC\</DBRegisterFilePath>
@@ -312,7 +312,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\device;..\drivers;..\src;..\src\Buzzer;..\src\LED;..\src\Key;..\src\Nixie;..\src\ADC;..\src\PWM;..\src\Timer;..\src\UART;..\src\Motor;..\src\I2C;..\src\NTC;..\src\Factory;..\src\Labs;..\src\EXTI;..\src\Labs\LedModelLab;..\src\Labs\BuzzerSequenceLab;..\src\Labs\TimerTickLab;..\src\DHT11;..\src\Labs\BuzzerToneLab;..\src\Labs\AlarmLab;..\src\Labs\BuzzerArrayLab;..\src\Matrix;..\src\Labs\LedPwmLab;..\src\Labs\AdcMotorLab;..\src\Labs\KeyLedLab;..\src\Labs\KeyOutputLab;..\src\Labs\LedBasicLab;..\src\Labs\LedCycleLab;..\src\Labs\LedFlipLab;..\src\Labs\LedFlowLab;..\src\Labs\NtcTestLab;..\src\Labs\RtcDisplayLab;..\src\Labs\UartDeviceLab;..\src\Labs\MatrixKeyLab;..\src\Labs\PotMotorLab;..\Dirvers;..\src\SpiOled;..\src\SelfTest;..\src\Labs\AdcModeLab;..\src\Labs\UartCommand;..\src\Labs\AdcNixieLab</IncludePath>
+              <IncludePath>..\device;..\drivers;..\src;..\src\Buzzer;..\src\LED;..\src\Key;..\src\Nixie;..\src\ADC;..\src\PWM;..\src\Timer;..\src\UART;..\src\Motor;..\src\I2C;..\src\NTC;..\src\Factory;..\src\Labs;..\src\EXTI;..\src\Labs\LedModelLab;..\src\Labs\BuzzerSequenceLab;..\src\Labs\TimerTickLab;..\src\DHT11;..\src\Labs\BuzzerToneLab;..\src\Labs\AlarmLab;..\src\Labs\BuzzerArrayLab;..\src\Matrix;..\src\Labs\LedPwmLab;..\src\Labs\AdcMotorLab;..\src\Labs\KeyLedLab;..\src\Labs\KeyOutputLab;..\src\Labs\LedBasicLab;..\src\Labs\LedCycleLab;..\src\Labs\LedFlipLab;..\src\Labs\LedFlowLab;..\src\Labs\NtcTestLab;..\src\Labs\RtcDisplayLab;..\src\Labs\UartDeviceLab;..\src\Labs\MatrixKeyLab;..\src\Labs\PotMotorLab;..\Dirvers;..\src\SpiOled;..\src\SelfTest;..\src\Labs\AdcModeLab;..\src\Labs\UartCommand;..\src\Labs\AdcNixieLab;..\src\Labs\NtcDisplayLab</IncludePath>
             </VariousControls>
           </C51>
           <Ax51>
@@ -324,7 +324,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\device;..\drivers;..\src;..\src\Buzzer;..\src\ADC;..\src\Nixie;..\src\Key;..\src\Timer;..\src\PWM;..\src\UART;..\src\LED;..\src\Motor;..\src\Factory;..\src\DHT11;..\src\Labs;..\src\Labs\BuzzerToneLab;..\src\Labs\AlarmLab;..\src\Labs\BuzzerArrayLab;..\src\Matrix;..\src\Labs\LedPwmLab;..\src\Labs\AdcMotorLab;..\src\Labs\BuzzerSequenceLab;..\src\Labs\KeyLedLab;..\src\Labs\KeyOutputLab;..\src\Labs\LedBasicLab;..\src\Labs\LedCycleLab;..\src\Labs\LedFlipLab;..\src\Labs\LedFlowLab;..\src\Labs\LedModelLab;..\src\Labs\NtcTestLab;..\src\Labs\RtcDisplayLab;..\src\Labs\TimerTickLab;..\src\Labs\UartDeviceLab;..\src\Labs\MatrixKeyLab;..\src\Labs\PotMotorLab;..\src\EXTI;..\src\I2C;..\src\NTC;..\src\SpiOled;..\src\SelfTest;..\src\Labs\AdcModeLab;..\src\Labs\UartCommand;..\src\Labs\AdcNixieLab</IncludePath>
+              <IncludePath>..\device;..\drivers;..\src;..\src\Buzzer;..\src\ADC;..\src\Nixie;..\src\Key;..\src\Timer;..\src\PWM;..\src\UART;..\src\LED;..\src\Motor;..\src\Factory;..\src\DHT11;..\src\Labs;..\src\Labs\BuzzerToneLab;..\src\Labs\AlarmLab;..\src\Labs\BuzzerArrayLab;..\src\Matrix;..\src\Labs\LedPwmLab;..\src\Labs\AdcMotorLab;..\src\Labs\BuzzerSequenceLab;..\src\Labs\KeyLedLab;..\src\Labs\KeyOutputLab;..\src\Labs\LedBasicLab;..\src\Labs\LedCycleLab;..\src\Labs\LedFlipLab;..\src\Labs\LedFlowLab;..\src\Labs\LedModelLab;..\src\Labs\NtcTestLab;..\src\Labs\RtcDisplayLab;..\src\Labs\TimerTickLab;..\src\Labs\UartDeviceLab;..\src\Labs\MatrixKeyLab;..\src\Labs\PotMotorLab;..\src\EXTI;..\src\I2C;..\src\NTC;..\src\SpiOled;..\src\SelfTest;..\src\Labs\AdcModeLab;..\src\Labs\UartCommand;..\src\Labs\AdcNixieLab;..\src\Labs\NtcDisplayLab</IncludePath>
             </VariousControls>
           </Ax51>
           <Lx51>
@@ -573,6 +573,11 @@
               <FileName>AdcNixieLab.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\Labs\AdcNixieLab\AdcNixieLab.c</FilePath>
+            </File>
+            <File>
+              <FileName>NtcDisplayLab.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\Labs\NtcDisplayLab\NtcDisplayLab.c</FilePath>
             </File>
 </Files>
         </Group>

@@ -1,15 +1,16 @@
 #include "Config.h"
 #include "SelfTest.h"
-#include "AdcNixieLab.h"
+#include "NtcDisplayLab.h"
 
 /*
  * Demo练习main函数入口
  */
 void main_start(void) RTX_TASK(0)
 {
-    AdcNixieLab_Init();
+    NtcDisplayLab_Init();
     while (1) {
-        AdcNixieLab_Task();
+        NtcDisplayLab_DisplayTask();
+        NtcDisplayLab_SampleTask();
     }
 }
 
