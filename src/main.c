@@ -1,16 +1,16 @@
 #include "Config.h"
 #include "SelfTest.h"
-#include "NtcDisplayLab.h"
+#include "TempAlarmLab.h"
 
 /*
  * Demo练习main函数入口
  */
 void main_start(void) RTX_TASK(0)
 {
-    NtcDisplayLab_Init();
+    TempAlarmLab_Init();
     while (1) {
-        NtcDisplayLab_DisplayTask();
-        NtcDisplayLab_SampleTask();
+        TempAlarmLab_SampleTask();
+        TempAlarmLab_AlarmTask();
     }
 }
 
