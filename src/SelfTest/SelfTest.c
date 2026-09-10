@@ -691,196 +691,196 @@ void SelfTest_Init(void)
  * 蜂鸣器页额外把 K1/K2/K3 转为 C/D/E 音符请求。此任务绝不操作 OLED/PWM，
  * 以保证 task_2 独占显示和外设输出，避免并发写硬件。
  */
-void SelfTest_InputTask(void) RTX_TASK(1)
-{
-    while (1) {
-        Key_Scan();
-
-        if (current_page == SELFTEST_PAGE_MENU) {
-            if (Key_GetPressEvent(SELFTEST_KEY_NEXT) != 0) {
-                selected_item++;
-                if (selected_item >= SELFTEST_ITEM_COUNT) {
-                    selected_item = SELFTEST_ITEM_LED;
-                }
-                os_send_signal(2);
-            }
-            else if (Key_GetPressEvent(SELFTEST_KEY_PREVIOUS) != 0) {
-                if (selected_item == SELFTEST_ITEM_LED) {
-                    selected_item = SELFTEST_ITEM_KEY_BUZZER;
-                }
-                else {
-                    selected_item--;
-                }
-                os_send_signal(2);
-            }
-            else if (Key_GetPressEvent(SELFTEST_KEY_ENTER) != 0) {
-                current_page = SELFTEST_PAGE_DETAIL;
-                os_send_signal(2);
-            }
-            else {
-                /* 菜单页忽略 KEY4，仍消费事件，避免它在进入详情页后误触发返回。 */
-                Key_GetPressEvent(SELFTEST_KEY_BACK);
-            }
-        }
-        else {
-            /*
-             * 键盘蜂鸣器项目把 KEY1~KEY3 转换成音调请求。
-             * task_1 不直接操作 PWM，保证外设输出仍由 task_2 独占。
-             */
-            if (selected_item == SELFTEST_ITEM_KEY_BUZZER) {
-                if (Key_GetPressEvent(SELFTEST_KEY_NEXT) != 0) {
-                    buzzer_note_request = SELFTEST_BUZZER_NOTE_C;
-                    os_send_signal(2);
-                }
-                else if (Key_GetPressEvent(SELFTEST_KEY_PREVIOUS) != 0) {
-                    buzzer_note_request = SELFTEST_BUZZER_NOTE_D;
-                    os_send_signal(2);
-                }
-                else if (Key_GetPressEvent(SELFTEST_KEY_ENTER) != 0) {
-                    buzzer_note_request = SELFTEST_BUZZER_NOTE_E;
-                    os_send_signal(2);
-                }
-                else if (Key_GetPressEvent(SELFTEST_KEY_BACK) != 0) {
-                    current_page = SELFTEST_PAGE_MENU;
-                    os_send_signal(2);
-                }
-            }
-            else if (Key_GetPressEvent(SELFTEST_KEY_BACK) != 0) {
-                current_page = SELFTEST_PAGE_MENU;
-                os_send_signal(2);
-            }
-            else {
-                /* 其他详情页暂不使用 KEY1、KEY2、KEY3，先消费事件。 */
-                Key_GetPressEvent(SELFTEST_KEY_NEXT);
-                Key_GetPressEvent(SELFTEST_KEY_PREVIOUS);
-                Key_GetPressEvent(SELFTEST_KEY_ENTER);
-            }
-        }
-
-        /* 约每个 RTX 节拍扫描一次；Key_Scan 内部仍以 10 ms 非阻塞消抖。 */
-        os_wait2(K_TMO, 1);
-    }
-}
+// void SelfTest_InputTask(void) RTX_TASK(1)
+// {
+//     while (1) {
+//         Key_Scan();
+//
+//         if (current_page == SELFTEST_PAGE_MENU) {
+//             if (Key_GetPressEvent(SELFTEST_KEY_NEXT) != 0) {
+//                 selected_item++;
+//                 if (selected_item >= SELFTEST_ITEM_COUNT) {
+//                     selected_item = SELFTEST_ITEM_LED;
+//                 }
+//                 os_send_signal(2);
+//             }
+//             else if (Key_GetPressEvent(SELFTEST_KEY_PREVIOUS) != 0) {
+//                 if (selected_item == SELFTEST_ITEM_LED) {
+//                     selected_item = SELFTEST_ITEM_KEY_BUZZER;
+//                 }
+//                 else {
+//                     selected_item--;
+//                 }
+//                 os_send_signal(2);
+//             }
+//             else if (Key_GetPressEvent(SELFTEST_KEY_ENTER) != 0) {
+//                 current_page = SELFTEST_PAGE_DETAIL;
+//                 os_send_signal(2);
+//             }
+//             else {
+//                 /* 菜单页忽略 KEY4，仍消费事件，避免它在进入详情页后误触发返回。 */
+//                 Key_GetPressEvent(SELFTEST_KEY_BACK);
+//             }
+//         }
+//         else {
+//             /*
+//              * 键盘蜂鸣器项目把 KEY1~KEY3 转换成音调请求。
+//              * task_1 不直接操作 PWM，保证外设输出仍由 task_2 独占。
+//              */
+//             if (selected_item == SELFTEST_ITEM_KEY_BUZZER) {
+//                 if (Key_GetPressEvent(SELFTEST_KEY_NEXT) != 0) {
+//                     buzzer_note_request = SELFTEST_BUZZER_NOTE_C;
+//                     os_send_signal(2);
+//                 }
+//                 else if (Key_GetPressEvent(SELFTEST_KEY_PREVIOUS) != 0) {
+//                     buzzer_note_request = SELFTEST_BUZZER_NOTE_D;
+//                     os_send_signal(2);
+//                 }
+//                 else if (Key_GetPressEvent(SELFTEST_KEY_ENTER) != 0) {
+//                     buzzer_note_request = SELFTEST_BUZZER_NOTE_E;
+//                     os_send_signal(2);
+//                 }
+//                 else if (Key_GetPressEvent(SELFTEST_KEY_BACK) != 0) {
+//                     current_page = SELFTEST_PAGE_MENU;
+//                     os_send_signal(2);
+//                 }
+//             }
+//             else if (Key_GetPressEvent(SELFTEST_KEY_BACK) != 0) {
+//                 current_page = SELFTEST_PAGE_MENU;
+//                 os_send_signal(2);
+//             }
+//             else {
+//                 /* 其他详情页暂不使用 KEY1、KEY2、KEY3，先消费事件。 */
+//                 Key_GetPressEvent(SELFTEST_KEY_NEXT);
+//                 Key_GetPressEvent(SELFTEST_KEY_PREVIOUS);
+//                 Key_GetPressEvent(SELFTEST_KEY_ENTER);
+//             }
+//         }
+//
+//         /* 约每个 RTX 节拍扫描一次；Key_Scan 内部仍以 10 ms 非阻塞消抖。 */
+//         os_wait2(K_TMO, 1);
+//     }
+// }
 
 /*
  * RTX task_2：系统的唯一显示与自检执行任务。
  * 启动阶段初始化 SPI OLED、硬件 I2C、RTC 与 I2C OLED，然后绘制菜单首帧；循环阶段根据
  * 当前详情项目进行周期采样/输出，并用 K_SIG 打断定时等待，从而让 K4 返回无需等完整刷新周期。
  */
-void SelfTest_ViewTask(void) RTX_TASK(2)
-{
-    /*
-     * 不依赖“任务刚创建时收到信号”的时序：任务 2 一开始就初始化并画首帧。
-     * 之后本任务才进入 os_wait1(K_SIG) 等待按键事件。
-     */
-    SpiOled_Init();
-
-    /*
-     * 现有 I2C OLED 的 OLED_WR_Byte() 最终调用 I2C_WriteNbyte()，
-     * 所以必须先启用硬件 I2C 并映射 P3.2/P3.3；RTC 之后也复用同一总线。
-     */
-    IIC_Init();
-    SelfTest_SyncRtcOnFirstFirmwareStart();
-    OLED_Init();
-    OLED_ColorTurn(0);
-    OLED_DisplayTurn(0);
-    SelfTest_RefreshUi();
-
-    while (1) {
-        if ((current_page == SELFTEST_PAGE_DETAIL) &&
-            (selected_item == SELFTEST_ITEM_LED)) {
-            /* 每个周期增加一盏：1→2→…→8→0，达到全亮后下一步全部熄灭。 */
-            if (led_count < 8) {
-                led_count++;
-            }
-            else {
-                led_count = 0;
-            }
-            LED_ShowCount(led_count);
-            SelfTest_ShowLedCount();
-            os_wait2(K_SIG | K_TMO, SELFTEST_REFRESH_TICKS);
-
-            /* 收到 KEY4 后立即熄灯并恢复菜单画面。 */
-            if ((current_page != SELFTEST_PAGE_DETAIL) ||
-                (selected_item != SELFTEST_ITEM_LED)) {
-                SelfTest_RefreshUi();
-            }
-        }
-        else if ((current_page == SELFTEST_PAGE_DETAIL) &&
-                 (selected_item == SELFTEST_ITEM_NTC)) {
-            SelfTest_ShowNtcTemperature();
-            os_wait2(K_SIG | K_TMO, SELFTEST_REFRESH_TICKS);
-
-            if ((current_page != SELFTEST_PAGE_DETAIL) ||
-                (selected_item != SELFTEST_ITEM_NTC)) {
-                SelfTest_RefreshUi();
-            }
-        }
-        else if (SelfTest_IsCurrentDetail(SELFTEST_ITEM_MOTOR)) {
-            /* 读取电位器、更新 PWM 占空比并显示两者对应关系。 */
-            SelfTest_ShowMotorValues();
-            os_wait2(K_SIG | K_TMO, SELFTEST_REFRESH_TICKS);
-
-            if (SelfTest_IsCurrentDetail(SELFTEST_ITEM_MOTOR) == 0) {
-                SelfTest_RefreshUi();
-            }
-        }
-        else if (SelfTest_IsCurrentDetail(SELFTEST_ITEM_RTC)) {
-            /* RTC 每次只读当前时间寄存器，不会修改已保存的日期和时间。 */
-            SelfTest_ShowRtcTime();
-            os_wait2(K_SIG | K_TMO, SELFTEST_REFRESH_TICKS);
-
-            if (SelfTest_IsCurrentDetail(SELFTEST_ITEM_RTC) == 0) {
-                SelfTest_RefreshUi();
-            }
-        }
-        else if (SelfTest_IsCurrentDetail(SELFTEST_ITEM_NIXIE)) {
-            /* 顶部→右侧向下→底部→左侧向上，20 步组成完整一圈。 */
-            SelfTest_ShowNixieRunningLight();
-            nixie_position = (nixie_position + 1) % 20;
-            os_wait2(K_SIG | K_TMO, SELFTEST_REFRESH_TICKS);
-
-            if (SelfTest_IsCurrentDetail(SELFTEST_ITEM_NIXIE) == 0) {
-                SelfTest_RefreshUi();
-            }
-        }
-        else if (SelfTest_IsCurrentDetail(SELFTEST_ITEM_DHT11)) {
-            /* DHT11 读取含有严格时序，因此控制在约 1 秒采样一次。 */
-            SelfTest_ShowDhtData();
-            os_wait2(K_SIG | K_TMO, SELFTEST_DHT_REFRESH_TICKS);
-
-            if (SelfTest_IsCurrentDetail(SELFTEST_ITEM_DHT11) == 0) {
-                SelfTest_RefreshUi();
-            }
-        }
-        else if (SelfTest_IsCurrentDetail(SELFTEST_ITEM_KEY_BUZZER)) {
-            /*
-             * 有音调请求时播放一个短音；等待期间收到 KEY4 信号会立刻停音并返回。
-             * 没有请求时完全挂起，不会无意义地刷新屏幕或占用 PWM。
-             */
-            if (buzzer_note_request != SELFTEST_BUZZER_NONE) {
-                u8 note = buzzer_note_request;
-                buzzer_note_request = SELFTEST_BUZZER_NONE;
-                Buzzer_Beep(note);
-                SelfTest_ShowBuzzerNote(note);
-                os_wait2(K_SIG | K_TMO, SELFTEST_BEEP_TICKS);
-                Buzzer_Stop();
-
-                if (SelfTest_IsCurrentDetail(SELFTEST_ITEM_KEY_BUZZER) == 0) {
-                    SelfTest_RefreshUi();
-                }
-            }
-            else {
-                os_wait1(K_SIG);
-
-                if (SelfTest_IsCurrentDetail(SELFTEST_ITEM_KEY_BUZZER) == 0) {
-                    SelfTest_RefreshUi();
-                }
-            }
-        }
-        else {
-            os_wait1(K_SIG);
-            SelfTest_RefreshUi();
-        }
-    }
-}
+// void SelfTest_ViewTask(void) RTX_TASK(2)
+// {
+//     /*
+//      * 不依赖“任务刚创建时收到信号”的时序：任务 2 一开始就初始化并画首帧。
+//      * 之后本任务才进入 os_wait1(K_SIG) 等待按键事件。
+//      */
+//     SpiOled_Init();
+//
+//     /*
+//      * 现有 I2C OLED 的 OLED_WR_Byte() 最终调用 I2C_WriteNbyte()，
+//      * 所以必须先启用硬件 I2C 并映射 P3.2/P3.3；RTC 之后也复用同一总线。
+//      */
+//     IIC_Init();
+//     SelfTest_SyncRtcOnFirstFirmwareStart();
+//     OLED_Init();
+//     OLED_ColorTurn(0);
+//     OLED_DisplayTurn(0);
+//     SelfTest_RefreshUi();
+//
+//     while (1) {
+//         if ((current_page == SELFTEST_PAGE_DETAIL) &&
+//             (selected_item == SELFTEST_ITEM_LED)) {
+//             /* 每个周期增加一盏：1→2→…→8→0，达到全亮后下一步全部熄灭。 */
+//             if (led_count < 8) {
+//                 led_count++;
+//             }
+//             else {
+//                 led_count = 0;
+//             }
+//             LED_ShowCount(led_count);
+//             SelfTest_ShowLedCount();
+//             os_wait2(K_SIG | K_TMO, SELFTEST_REFRESH_TICKS);
+//
+//             /* 收到 KEY4 后立即熄灯并恢复菜单画面。 */
+//             if ((current_page != SELFTEST_PAGE_DETAIL) ||
+//                 (selected_item != SELFTEST_ITEM_LED)) {
+//                 SelfTest_RefreshUi();
+//             }
+//         }
+//         else if ((current_page == SELFTEST_PAGE_DETAIL) &&
+//                  (selected_item == SELFTEST_ITEM_NTC)) {
+//             SelfTest_ShowNtcTemperature();
+//             os_wait2(K_SIG | K_TMO, SELFTEST_REFRESH_TICKS);
+//
+//             if ((current_page != SELFTEST_PAGE_DETAIL) ||
+//                 (selected_item != SELFTEST_ITEM_NTC)) {
+//                 SelfTest_RefreshUi();
+//             }
+//         }
+//         else if (SelfTest_IsCurrentDetail(SELFTEST_ITEM_MOTOR)) {
+//             /* 读取电位器、更新 PWM 占空比并显示两者对应关系。 */
+//             SelfTest_ShowMotorValues();
+//             os_wait2(K_SIG | K_TMO, SELFTEST_REFRESH_TICKS);
+//
+//             if (SelfTest_IsCurrentDetail(SELFTEST_ITEM_MOTOR) == 0) {
+//                 SelfTest_RefreshUi();
+//             }
+//         }
+//         else if (SelfTest_IsCurrentDetail(SELFTEST_ITEM_RTC)) {
+//             /* RTC 每次只读当前时间寄存器，不会修改已保存的日期和时间。 */
+//             SelfTest_ShowRtcTime();
+//             os_wait2(K_SIG | K_TMO, SELFTEST_REFRESH_TICKS);
+//
+//             if (SelfTest_IsCurrentDetail(SELFTEST_ITEM_RTC) == 0) {
+//                 SelfTest_RefreshUi();
+//             }
+//         }
+//         else if (SelfTest_IsCurrentDetail(SELFTEST_ITEM_NIXIE)) {
+//             /* 顶部→右侧向下→底部→左侧向上，20 步组成完整一圈。 */
+//             SelfTest_ShowNixieRunningLight();
+//             nixie_position = (nixie_position + 1) % 20;
+//             os_wait2(K_SIG | K_TMO, SELFTEST_REFRESH_TICKS);
+//
+//             if (SelfTest_IsCurrentDetail(SELFTEST_ITEM_NIXIE) == 0) {
+//                 SelfTest_RefreshUi();
+//             }
+//         }
+//         else if (SelfTest_IsCurrentDetail(SELFTEST_ITEM_DHT11)) {
+//             /* DHT11 读取含有严格时序，因此控制在约 1 秒采样一次。 */
+//             SelfTest_ShowDhtData();
+//             os_wait2(K_SIG | K_TMO, SELFTEST_DHT_REFRESH_TICKS);
+//
+//             if (SelfTest_IsCurrentDetail(SELFTEST_ITEM_DHT11) == 0) {
+//                 SelfTest_RefreshUi();
+//             }
+//         }
+//         else if (SelfTest_IsCurrentDetail(SELFTEST_ITEM_KEY_BUZZER)) {
+//             /*
+//              * 有音调请求时播放一个短音；等待期间收到 KEY4 信号会立刻停音并返回。
+//              * 没有请求时完全挂起，不会无意义地刷新屏幕或占用 PWM。
+//              */
+//             if (buzzer_note_request != SELFTEST_BUZZER_NONE) {
+//                 u8 note = buzzer_note_request;
+//                 buzzer_note_request = SELFTEST_BUZZER_NONE;
+//                 Buzzer_Beep(note);
+//                 SelfTest_ShowBuzzerNote(note);
+//                 os_wait2(K_SIG | K_TMO, SELFTEST_BEEP_TICKS);
+//                 Buzzer_Stop();
+//
+//                 if (SelfTest_IsCurrentDetail(SELFTEST_ITEM_KEY_BUZZER) == 0) {
+//                     SelfTest_RefreshUi();
+//                 }
+//             }
+//             else {
+//                 os_wait1(K_SIG);
+//
+//                 if (SelfTest_IsCurrentDetail(SELFTEST_ITEM_KEY_BUZZER) == 0) {
+//                     SelfTest_RefreshUi();
+//                 }
+//             }
+//         }
+//         else {
+//             os_wait1(K_SIG);
+//             SelfTest_RefreshUi();
+//         }
+//     }
+// }

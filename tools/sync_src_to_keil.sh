@@ -20,10 +20,15 @@ Usage:
 
 Examples:
   tools/sync_src_to_keil.sh Relay
+  tools/sync_src_to_keil.sh Light
+  tools/sync_src_to_keil.sh Car
   tools/sync_src_to_keil.sh Sensor/SHT30 --dry-run
   tools/sync_src_to_keil.sh --all
 
 Note:
+  可以直接输入目录名，脚本会在 src/ 下自动查找对应目录。
+  也可以输入相对于 src/ 的目录路径，或者 src/ 下的绝对路径。
+  如果找到多个同名目录，脚本会列出候选路径并要求使用相对路径。
   src/Labs is handled by tools/sync_labs_to_keil.sh.
 EOF
 }
@@ -51,8 +56,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         *)
             [[ -z "$MODULE_PATH" ]] || die "only one ModuleName may be specified"
-            [[ "$1" =~ ^[A-Za-z_][A-Za-z0-9_/-]*$ ]] || \
-                die "ModuleName may contain only letters, numbers, '_', '-' and '/'"
+            if [[ "$1" != /* ]]; then
+                [[ "$1" =~ ^[A-Za-z_][A-Za-z0-9_/-]*$ ]] || \
+                    die "ModuleName may contain only letters, numbers, '_', '-' and '/'"
+            fi
             [[ "$1" != *".."* ]] || die "ModuleName must not contain '..'"
             MODULE_PATH="$1"
             ;;
@@ -81,7 +88,41 @@ SCAN_ROOT="$SRC_ROOT"
 if [[ "$SYNC_ALL" -eq 0 ]]; then
     [[ "$MODULE_PATH" != "Labs" && "$MODULE_PATH" != Labs/* ]] || \
         die "src/Labs must use tools/sync_labs_to_keil.sh"
-    SCAN_ROOT="$SRC_ROOT/$MODULE_PATH"
+
+    # 允许输入src目录下的绝对路径，但禁止同步工程目录之外的内容。
+    if [[ "$MODULE_PATH" == /* ]]; then
+        [[ "$MODULE_PATH" == "$SRC_ROOT"/* ]] || \
+            die "absolute ModuleName must be inside $SRC_ROOT"
+        SCAN_ROOT="$MODULE_PATH"
+    elif [[ "$MODULE_PATH" == */* ]]; then
+        # 包含斜杠时，按照相对于src的路径处理，例如 projects/Car/Light。
+        SCAN_ROOT="$SRC_ROOT/$MODULE_PATH"
+    elif [[ -d "$SRC_ROOT/$MODULE_PATH" ]]; then
+        # 优先兼容原来的顶层目录用法，例如 LED、Motor、UART。
+        SCAN_ROOT="$SRC_ROOT/$MODULE_PATH"
+    else
+        # 顶层目录不存在时，在src下递归查找同名目录。
+        # 这样可以直接输入 Light 或 Car，不需要输入完整路径。
+        MATCHED_DIRS=()
+        while IFS= read -r matched_dir; do
+            MATCHED_DIRS+=("$matched_dir")
+        done < <(find "$SRC_ROOT" -path "$LABS_ROOT" -prune -o -type d -name "$MODULE_PATH" -print | LC_ALL=C sort)
+
+        if [[ "${#MATCHED_DIRS[@]}" -eq 0 ]]; then
+            die "module directory was not found under $SRC_ROOT: $MODULE_PATH"
+        fi
+
+        if [[ "${#MATCHED_DIRS[@]}" -gt 1 ]]; then
+            echo "multiple directories named '$MODULE_PATH' were found:" >&2
+            for matched_dir in "${MATCHED_DIRS[@]}"; do
+                echo "  ${matched_dir#$PROJECT_ROOT/}" >&2
+            done
+            die "please use a relative path such as projects/Car/$MODULE_PATH"
+        fi
+
+        SCAN_ROOT="${MATCHED_DIRS[0]}"
+    fi
+
     [[ -d "$SCAN_ROOT" ]] || die "module directory was not found: $SCAN_ROOT"
 fi
 
