@@ -6,34 +6,9 @@
 #include "Battery.h"
 #include "CarBuzzer.h"
 #include "Ultrasonic.h"
+#include "CarMotor.h"
 
-// 左前轮 left  forward
-#define 	LF_P		P16
-#define 	LF_N		P17
 
-// 右前轮 right forward
-#define 	RF_P		P14
-#define 	RF_N		P15
-
-// 左后轮 left backward
-#define 	LB_P		P22
-#define 	LB_N		P23
-
-// 右后轮 right backward
-#define 	RB_P		P20
-#define 	RB_N		P21
-
-/*
- * Demo练习main函数入口
- */
-// void main_start(void) RTX_TASK(0)
-// {
-//     TempAlarmLab_Init();
-//     while (1) {
-//         TempAlarmLab_SampleTask();
-//         TempAlarmLab_AlarmTask();
-//     }
-// }
 
 void sys_init() {
     EAXSFR();
@@ -42,18 +17,13 @@ void sys_init() {
     // 库函数初始化
     UART_Init();
 
-    // 电机驱动
-    // P14 15 16 17
-    P1_MODE_IO_PU(GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7);
-    // P20 21 22 23
-    P2_MODE_IO_PU(GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3);
-
     // 外设初始化
     Light_Init();
     CarKey_init();
     Battery_init();
     CarBuzzer_Init();
     Ultrasonic_init();
+    CarMotors_init();
 
     printf("====sys_init====\n");
 }
@@ -109,23 +79,46 @@ void CarKey_Task(void) RTX_TASK(2) {
 
 
 u8 flag = 1;
+int value = 0;
+char speed = 20;
 void CarKey_on_keydown() {
-    switch (flag) {
+    // 0~100  100~0渐变速度
+    #if 0
+    // 电机正反转 控制边界条件
+    if (flag) {
+        value += 10;
+        if (value >= 100) {
+            value = 100;
+            flag = 0;   // 开始递减
+        }
+    } else {
+        value -= 10;
+        if (value <= 0) {
+            value = 0;
+            flag = 1;   // 开始递增
+        }
+    }
+    printf("当前value为 -> %d\n", (int)value);
+    CarPWM_Init(value);
+#else
+    switch(flag){
     case 1:
-        printf("====正转====");
-        RF_P = 1;
-        RF_N = 0;
+        printf("===前进====\n");
+        CarMotors_forward(speed);
         break;
     case 2:
-        printf("====反转====");
-        RF_P = 0;
-        RF_N = 1;
+        printf("===后退====\n");
+        CarMotors_backward(speed);
         break;
-    default:
+    case 3:
+        printf("===停止====\n");
+        CarMotors_stop();
         break;
+    default:  break;
     }
     flag++;
-    if (flag > 2) flag = 1;
+    if (flag > 3) flag = 1;
+#endif
 }
 
 #if 0
@@ -161,20 +154,38 @@ void CarKey_on_keyup() {
 
 
 /*
+ * Demo练习main函数入口
+ */
+#if 0
+void main_start(void) RTX_TASK(0)
+{
+    TempAlarmLab_Init();
+    while (1) {
+        TempAlarmLab_SampleTask();
+        TempAlarmLab_AlarmTask();
+    }
+}
+#endif
+
+
+/*
  * RTX51 Tiny 的任务 0 仅做一次性初始化和任务创建。
  *
  * 任务 1（SelfTest_InputTask）：扫描 key1~key4，产生界面事件。
  * 任务 2（SelfTest_ViewTask）：独占初始化并刷新 SPI 菜单和 I2C 详情屏。
  */
-// void main_start(void) RTX_TASK(0)
-// {
-//     // 初始化任务基本环境
-//     SelfTest_Init();
-//
-//     // 创建任务
-//     os_create_task(1);
-//     os_create_task(2);
-//
-//     // 销毁任务
-//     os_delete_task(0);
-// }
+#if 0
+void main_start(void) RTX_TASK(0)
+{
+    // 初始化任务基本环境
+    SelfTest_Init();
+
+    // 创建任务
+    os_create_task(1);
+    os_create_task(2);
+
+    // 销毁任务
+    os_delete_task(0);
+}
+#endif
+
