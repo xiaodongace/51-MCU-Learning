@@ -489,7 +489,7 @@
               <FileType>1</FileType>
               <FilePath>..\src\Car\CarMotor\CarMotor.c</FilePath>
             </File>
-</Files>
+          </Files>
         </Group>
         <Group>
           <GroupName>Labs</GroupName>
@@ -599,7 +599,7 @@
               <FileType>1</FileType>
               <FilePath>..\src\Labs\UartCommand\UartCommand.c</FilePath>
             </File>
-                      <File>
+            <File>
               <FileName>AdcNixieLab.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\Labs\AdcNixieLab\AdcNixieLab.c</FilePath>
@@ -614,7 +614,7 @@
               <FileType>1</FileType>
               <FilePath>..\src\Labs\TempAlarmLab\TempAlarmLab.c</FilePath>
             </File>
-</Files>
+          </Files>
         </Group>
         <Group>
           <GroupName>Drivers</GroupName>

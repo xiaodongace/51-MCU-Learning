@@ -17,30 +17,34 @@ char speed2duty(char speed) {
 }
 
 
-static void CarMotorPWM_Init(u8 value) {
+static void CarMotorPWM_Init(MotorSpeed ms) {
     PWMx_InitDefine PWMx_InitStructure;
 
-    PWMx_InitStructure.PWM_Mode = CCMRn_PWM_MODE2;
-    PWMx_InitStructure.PWM_Duty = (speed2duty(value) / 100.0) * PERIOD; // PWM占空比时间, 0~Period
-    PWMx_InitStructure.PWM_EnoSelect = (value != 0) ? (ENO1P | ENO1N) : 0;
+    /* =====================右后轮 P20 P21 =====================*/
+    PWMx_InitStructure.PWM_Mode = CCMRn_PWM_MODE1;
+    PWMx_InitStructure.PWM_Duty = (speed2duty(ms.RB_Speed) / 100.0) * PERIOD; // PWM占空比时间, 0~Period
+    PWMx_InitStructure.PWM_EnoSelect = (ms.RB_Speed != 0) ? (ENO1P | ENO1N) : 0;
     //输出通道选择,	ENO1P,ENO1N,ENO2P,ENO2N,ENO3P,ENO3N,ENO4P,ENO4N / ENO5P,ENO6P,ENO7P,ENO8P
     PWM_Configuration(PWM1, &PWMx_InitStructure);
 
-    PWMx_InitStructure.PWM_Mode = CCMRn_PWM_MODE2;
-    PWMx_InitStructure.PWM_Duty = (speed2duty(value) / 100.0) * PERIOD; // PWM占空比时间, 0~Period
-    PWMx_InitStructure.PWM_EnoSelect = (value != 0) ? (ENO2P | ENO2N) : 0;
+    /* =====================左后轮 P22 P23 =====================*/
+    PWMx_InitStructure.PWM_Mode = CCMRn_PWM_MODE1;
+    PWMx_InitStructure.PWM_Duty = (speed2duty(ms.LB_Speed) / 100.0) * PERIOD; // PWM占空比时间, 0~Period
+    PWMx_InitStructure.PWM_EnoSelect = (ms.LB_Speed != 0) ? (ENO2P | ENO2N) : 0;
     //输出通道选择,	ENO1P,ENO1N,ENO2P,ENO2N,ENO3P,ENO3N,ENO4P,ENO4N / ENO5P,ENO6P,ENO7P,ENO8P
     PWM_Configuration(PWM2, &PWMx_InitStructure);
 
-    PWMx_InitStructure.PWM_Mode = CCMRn_PWM_MODE2;
-    PWMx_InitStructure.PWM_Duty = (speed2duty(value) / 100.0) * PERIOD; // PWM占空比时间, 0~Period
-    PWMx_InitStructure.PWM_EnoSelect = (value != 0) ? (ENO3P | ENO3N) : 0;
+    /* =====================右前轮 P14 P15 =====================*/
+    PWMx_InitStructure.PWM_Mode = CCMRn_PWM_MODE1;
+    PWMx_InitStructure.PWM_Duty = (speed2duty(ms.RF_Speed) / 100.0) * PERIOD; // PWM占空比时间, 0~Period
+    PWMx_InitStructure.PWM_EnoSelect = (ms.RF_Speed != 0) ? (ENO3P | ENO3N) : 0;
     //输出通道选择,	ENO1P,ENO1N,ENO2P,ENO2N,ENO3P,ENO3N,ENO4P,ENO4N / ENO5P,ENO6P,ENO7P,ENO8P
     PWM_Configuration(PWM3, &PWMx_InitStructure);
 
-    PWMx_InitStructure.PWM_Mode = CCMRn_PWM_MODE2;
-    PWMx_InitStructure.PWM_Duty = (speed2duty(value) / 100.0) * PERIOD; // PWM占空比时间, 0~Period
-    PWMx_InitStructure.PWM_EnoSelect = (value != 0) ? (ENO4P | ENO4N) : 0;
+    /* =====================左前轮 P16 P17 =====================*/
+    PWMx_InitStructure.PWM_Mode = CCMRn_PWM_MODE1;
+    PWMx_InitStructure.PWM_Duty = (speed2duty(ms.LF_Speed) / 100.0) * PERIOD; // PWM占空比时间, 0~Period
+    PWMx_InitStructure.PWM_EnoSelect = (ms.LF_Speed != 0) ? (ENO4P | ENO4N) : 0;
     //输出通道选择,	ENO1P,ENO1N,ENO2P,ENO2N,ENO3P,ENO3N,ENO4P,ENO4N / ENO5P,ENO6P,ENO7P,ENO8P
     PWM_Configuration(PWM4, &PWMx_InitStructure);
 
@@ -71,17 +75,155 @@ void CarMotors_init() {
     LF_P = LF_N = RF_P = RF_N = LB_P = LB_N = RB_P = RB_N = 0;
 }
 
-// 前进
-void CarMotors_forward(char speed) {
-    CarMotorPWM_Init(speed);
+/*
+ * LEFT_M   -> 左前
+ * MID_M    -> 直行
+ * RIGHT_M  -> 右前
+ */
+void CarMotors_forward(char speed, MotorsMode mode) {
+    MotorSpeed ms = {0};
+
+    switch (mode) {
+    case LEFT_M:
+        ms.LF_Speed = 0;
+        ms.LB_Speed = speed;
+        ms.RF_Speed = speed;
+        ms.RB_Speed = 0;
+        break;
+    case MID_M:
+        ms.LF_Speed = speed;
+        ms.LB_Speed = speed;
+        ms.RF_Speed = speed;
+        ms.RB_Speed = speed;
+        break;
+    case RIGHT_M:
+        ms.LF_Speed = speed;
+        ms.LB_Speed = 0;
+        ms.RF_Speed = 0;
+        ms.RB_Speed = speed;
+        break;
+    default: break;
+    }
+
+    CarMotorPWM_Init(ms);
 }
 
-// 后退
-void CarMotors_backward(char speed) {
-    CarMotorPWM_Init(-speed);
+
+/*
+ * LEFT_M   -> 左后
+ * MID_M    -> 倒车
+ * RIGHT_M  -> 右后
+ */
+void CarMotors_backward(char speed, MotorsMode mode) {
+    MotorSpeed ms = {0};
+
+    switch (mode) {
+    case LEFT_M:
+        ms.LF_Speed = -speed;
+        ms.LB_Speed = 0;
+        ms.RF_Speed = 0;
+        ms.RB_Speed = -speed;
+        break;
+    case MID_M:
+        ms.LF_Speed = -speed;
+        ms.LB_Speed = -speed;
+        ms.RF_Speed = -speed;
+        ms.RB_Speed = -speed;
+        break;
+    case RIGHT_M:
+        ms.LF_Speed = 0;
+        ms.LB_Speed = -speed;
+        ms.RF_Speed = -speed;
+        ms.RB_Speed = 0;
+        break;
+    default: break;
+    }
+    CarMotorPWM_Init(ms);
 }
 
-// 停止
+/*
+ * 左右平移
+ * speed：速度 0~100
+ * mode： LEFT_M左平移 ，RIGHT_M右平移
+ */
+void CarMotors_translate(char speed, MotorsMode mode) {
+    MotorSpeed ms = {0};
+
+    switch (mode) {
+    case LEFT_M:
+        ms.LF_Speed = -speed;
+        ms.LB_Speed = speed;
+        ms.RF_Speed = speed;
+        ms.RB_Speed = -speed;
+        break;
+    case RIGHT_M:
+        ms.LF_Speed = speed;
+        ms.LB_Speed = -speed;
+        ms.RF_Speed = -speed;
+        ms.RB_Speed = speed;
+        break;
+    default: break;
+    }
+    CarMotorPWM_Init(ms);
+}
+
+
+/*
+ * 顺时针 (Clockwise): 想象一个时钟，指针从12点走向1点、2点、3点。在时钟的上半部分，指针是向右移动的。所以“向右转”就是顺时针。
+ * 逆时针 (Counter-clockwise): 与时钟指针相反的方向，从12点走向11点、10点。在时钟的上半部分，指针是向左移动的。所以“向左转”就是逆时针。
+ * speed：速度 0~100  mode： LEFT_M向左旋转(逆时针) , RIGHT_M向右旋转(顺时针)
+ */
+void CarMotors_around(char speed, MotorsMode mode) {
+    MotorSpeed ms = {0};
+
+    switch (mode) {
+    case LEFT_M:
+        ms.LF_Speed = speed;
+        ms.LB_Speed = speed;
+        ms.RF_Speed = -speed;
+        ms.RB_Speed = -speed;
+        break;
+    case RIGHT_M:
+        ms.LF_Speed = -speed;
+        ms.LB_Speed = -speed;
+        ms.RF_Speed = speed;
+        ms.RB_Speed = speed;
+        break;
+    default: break;
+    }
+    CarMotorPWM_Init(ms);
+}
+
+
+/*
+ * speed：速度 0~100
+ * mode： LEFT_M左转 , RIGHT_M右转
+ */
+void CarMotors_turn(char speed, MotorsMode mode) {
+    MotorSpeed ms = {0};
+
+    switch (mode) {
+    case LEFT_M:
+        ms.LF_Speed = 0;
+        ms.LB_Speed = 0;
+        ms.RF_Speed = speed;
+        ms.RB_Speed = speed;
+        break;
+    case RIGHT_M:
+        ms.LF_Speed = speed;
+        ms.LB_Speed = speed;
+        ms.RF_Speed = 0;
+        ms.RB_Speed = 0;
+        break;
+    default: break;
+    }
+    CarMotorPWM_Init(ms);
+}
+
+/*
+ * 停止
+ */
 void CarMotors_stop() {
-    CarMotorPWM_Init(0);
+    MotorSpeed ms = {0};
+    CarMotorPWM_Init(ms);
 }

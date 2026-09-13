@@ -103,15 +103,15 @@ void CarKey_on_keydown() {
 #else
     switch(flag){
     case 1:
-        printf("===前进====\n");
-        CarMotors_forward(speed);
+        CarMotors_forward(speed, LEFT_M);
         break;
     case 2:
-        printf("===后退====\n");
-        CarMotors_backward(speed);
+        CarMotors_forward(speed, MID_M);
         break;
     case 3:
-        printf("===停止====\n");
+        CarMotors_forward(speed, RIGHT_M);
+        break;
+    case 4:
         CarMotors_stop();
         break;
     default:  break;
