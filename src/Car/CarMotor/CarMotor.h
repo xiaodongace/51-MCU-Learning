@@ -53,4 +53,7 @@ void CarMotors_turn(char speed ,  MotorsMode mode);
 // 停止
 void CarMotors_stop();
 
+// 根据x y方向自由移动
+void CarMotors_Move(char x, char y);
+
 #endif /* __CAR_MOTOR_H */

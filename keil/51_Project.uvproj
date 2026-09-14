@@ -489,12 +489,12 @@
               <FileType>1</FileType>
               <FilePath>..\src\Car\CarMotor\CarMotor.c</FilePath>
             </File>
-                      <File>
+            <File>
               <FileName>Track.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\Car\Track\Track.c</FilePath>
             </File>
-</Files>
+          </Files>
         </Group>
         <Group>
           <GroupName>Labs</GroupName>

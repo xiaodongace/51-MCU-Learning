@@ -45,7 +45,7 @@ void main_start(void) RTX_TASK(0)
     sys_init();
 
     // 创建任务
-    os_create_task(Light_Task_Id);
+    // os_create_task(Light_Task_Id);
     os_create_task(CarKey_Task_Id);
     os_create_task(Uart1_Task_Id);
     os_create_task(Uart2_Task_Id);
@@ -88,6 +88,88 @@ void CarKey_Task(void) RTX_TASK(CarKey_Task_Id) {
 
 
 /*
+ * 蓝牙电机方向控制
+ */
+void do_work_app() {
+    u8 * buf = RX2_Buffer;
+    char x, y;
+
+    // static变量，函数调用完毕不释放
+    static u8 led_flag = 0;     // 1:灯亮, 0:灯灭
+    static u8 is_tracking = 0;  // 1:巡线开启, 0:关闭
+    static u8 is_turning = 0; 	// 1:正在原地旋转, 0:未旋转
+
+    // 提取当前按键状态
+    u8 cur_A = buf[4];
+    u8 cur_B = buf[5];
+    u8 cur_C = buf[6];
+    u8 cur_D = buf[7];
+
+    if (buf[0] != 0xDD || buf[1] != 0x77) {
+        // 帧头不对
+        return;
+    }
+
+    if (cur_A) {
+        // printf("蜂鸣器");
+        CarBuzzer_Test_Beep();
+        if (led_flag == 0) {
+            // printf("开灯");
+            Light_On(ALL);
+        } else {
+            // printf("关灯");
+            Light_Off(ALL);
+        }
+        led_flag = !led_flag;
+    }
+
+    if (cur_D) {
+        if (is_tracking == 0) {
+            // printf("开启巡线");
+            os_create_task(Track_Task_Id);
+        } else {
+            // printf("关闭巡线");
+            os_delete_task(Track_Task_Id);
+            CarMotors_stop();   // 销毁任务后并不会关闭电机
+        }
+        is_tracking = !is_tracking;
+    }
+
+    // 互斥 如果开启了巡线 屏蔽手动驾驶 直接退出
+    if (is_tracking == 1) return;
+
+    //4. 运动控制 (无巡线时生效)
+    //    B/C键: 旋转 (电平触发：按住持续生效)
+    // B: 左旋转: 按下开始转,抬起停止转
+    // C: 右旋转: 按下开始转,抬起停止转
+    if (cur_B == 1) { // 按下B
+        if (is_turning == 0) { // 没有旋转
+            // printf("左旋转\n");
+            CarMotors_around(30, LEFT_M);
+            is_turning = 1; // 已经旋转了
+        }
+    }else if (cur_C == 1) { // 按下C
+        if (is_turning == 0) { // 没有旋转
+            // printf("右旋转\n");
+            CarMotors_around(30, RIGHT_M);
+            is_turning = 1; // 已经旋转了
+        }
+    } else { // B和C抬起
+        if (is_turning == 1) {
+            // printf("停止转\n");
+            CarMotors_stop();
+            is_turning = 0;
+        }
+    }
+
+    //    摇杆控制: 只有在没有按下旋转按键时，摇杆才生效
+    if (is_turning == 0) {
+        x = buf[2], y = buf[3];
+        CarMotors_Move(x, y);
+    }
+}
+
+/*
  * 测试蓝牙
  */
 #if 1
@@ -120,6 +202,7 @@ void Uart2_Task(void) RTX_TASK(Uart2_Task_Id) {
             //超时计数
             if(--COM2.RX_TimeOut == 0) {
                 if(COM2.RX_Cnt > 0) {
+                    do_work_app();
                     for(i=0; i<COM2.RX_Cnt; i++)	{
                         // RX2_Buffer[i]存的是接收的数据，写出用 TX2_write2buff
                         TX1_write2buff(RX2_Buffer[i]);

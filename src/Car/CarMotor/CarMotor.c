@@ -227,3 +227,29 @@ void CarMotors_stop() {
     MotorSpeed ms = {0};
     CarMotorPWM_Init(ms);
 }
+
+
+// value不能是char类型，数据会溢出
+// 限制速度值，只能在 ~100 - 100 区间
+static char LimitSpeed(int value) {
+    if (value >= 100) {
+        return 100;
+    }
+    else if (value <= -100) {
+        return -100;
+    }
+
+    return value;
+}
+
+
+void CarMotors_Move(char x, char y) {
+    MotorSpeed ms = {0};
+
+    ms.LF_Speed = 0.3 * LimitSpeed(x + y); // 不要全速执行，30%~40%速度即可
+    ms.LB_Speed = 0.3 * LimitSpeed(y - x);
+    ms.RF_Speed = 0.3 * LimitSpeed(y - x);
+    ms.RB_Speed = 0.3 * LimitSpeed(x + y);
+
+    CarMotorPWM_Init(ms);
+}
